@@ -1,0 +1,208 @@
+---
+title: "QIIME2_PipeLine"
+output: html_document
+author: "Daniel Bu"
+date: "2025-11-06"
+---
+
+## Purpose
+
+This R Markdown file records the Bash commands I used on the Microbiology 305 server for QIIME2 Piping.\
+It's intended for recording keep any codes associates with QIIME Pipe Line done for this project.\
+All commands were ran exclusively on the server.
+
+### Importing and demultiplexing
+
+```{bash}
+
+# Make and navigate work directory for the project
+mkdir /work/project2
+cd /work/project2
+
+# Import fish sequence 
+qiime tools import \
+  --type EMPSingleEndSequences \
+  --input-path /datasets/project_2/fish/seqs \
+  --output-path emp-single-end-sequences.qza
+  
+# Inspect artifact information
+qiime tools peek emp-single-end-sequences.qza
+
+# Import and demultiplex fish dataset
+qiime tools import \
+  --type "SampleData[SequencesWithQuality]" \
+  --input-format SingleEndFastqManifestPhred33V2 \
+  --input-path /datasets/project_2/fish/fish_manifest.tsv  \
+  --output-path ./demux_seqs.qza
+```
+
+### Denoising and Clustering
+
+```{bash}
+# Determine ASVs with DADA2
+qiime dada2 denoise-single \
+  --i-demultiplexed-seqs demux_seqs.qza \
+  --p-trim-left 0 \
+  --p-trunc-len 191 \
+  --o-representative-sequences rep-seqs.qza \
+  --o-table table.qza \
+  --o-denoising-stats stats.qza
+  
+# Visualize DADA2 stats
+qiime metadata tabulate \
+  --m-input-file stats.qza \
+  --o-visualization stats.qzv
+  
+# Changing metadata format into tsv
+tr ' ' '\t' < /datasets/project_2/fish/fish_metadata.txt > fish_metadata.tsv
+
+# Visualize ASVs stats
+qiime feature-table summarize \
+  --i-table table.qza \
+  --o-visualization table.qzv \
+  --m-sample-metadata-file fish_metadata.tsv
+```
+
+### Taxonomy
+
+```{bash}
+# Taxonomic analysis
+qiime feature-classifier classify-sklearn \
+  --i-classifier /datasets/classifiers/gg-2024.09.backbone.v4-515-806.nb.sklearn-1.4.2.qza \
+  --i-reads rep-seqs.qza \
+  --o-classification taxonomy.qza
+
+# Vidualize taxonomy result
+qiime metadata tabulate \
+  --m-input-file taxonomy.qza \
+  --o-visualization taxonomy.qzv
+
+# Taxonomy barplots
+qiime taxa barplot \
+  --i-table table.qza \
+  --i-taxonomy taxonomy.qza \
+  --m-metadata-file fish_metadata.tsv \
+  --o-visualization taxa-bar-plots.qzv
+```
+
+### Data Cleaning and Wrangling
+
+```{bash}
+# Rename a header in metadata due to have same name (case insensitive) (sample_type and SAMPLE_TYPE)
+awk -F'\t' 'NR==1 {
+  for (i=1; i<=NF; i++) {
+    key=toupper($i)        # Treat headers as case-insensitive
+    if (seen[key]++) $i=$i "_2"   # If seen before, rename by adding _2
+  }
+}1' OFS='\t' fish_metadata.tsv > fish_metadata_fixed.tsv 
+
+# Filter dataset based on project interest
+qiime feature-table filter-samples \
+  --i-table table.qza \
+  --m-metadata-file fish_metadata_cleaned.tsv \
+  --p-where "[substrata_collection]='rocky reef' AND [sample_type] IN ('midgut', 'hindgut') AND [p_order] IN ('Perciformes','Centrarchiformes','Blenniiformes','Labriformes')" \
+  --o-filtered-table rocky-reef-gut-orders-filtered-table.qza
+
+# Visualize ASV data with filtered dataset
+qiime feature-table summarize \
+  --i-table rocky-reef-gut-orders-filtered-table.qza \
+  --o-visualization rocky-reef-gut-orders-filtered-table.qzv \
+  --m-sample-metadata-file fish_metadata_cleaned.tsv 
+
+# Add one column that specify each observation
+# Allow analysis with a category that represent each observation 
+awk 'NR==1 {print $0 "\tsample_id"} NR>1 {print $0 "\t" $1}' fish_metadata_cleaned.tsv > fish_metadata_with_id.tsv
+sed 's/\r$//' fish_metadata_cleaned.tsv > fish_metadata_with_id_clean.tsv
+awk -F'\t' 'BEGIN{OFS=FS} NR==1 {print $0, "sample_id"; next} {print $0, $1}' fish_metadata_with_id_clean.tsv > fish_metadata_labelled.tsv
+```
+
+### Diversity analysis
+
+```{bash}
+# Generate a tree for phylogenetic diversity analyses
+qiime phylogeny align-to-tree-mafft-fasttree \
+  --i-sequences rep-seqs.qza \
+  --o-alignment aligned-rep-seqs.qza \
+  --o-masked-alignment masked-aligned-rep-seqs.qza \
+  --o-tree unrooted-tree.qza \
+  --o-rooted-tree rooted-tree.qza 
+
+# Alpha-rarefaction
+# filtered version
+qiime diversity alpha-rarefaction \
+  --i-table rocky-reef-gut-orders-filtered-table.qza \
+  --i-phylogeny rooted-tree.qza \
+  --p-max-depth 2000 \
+  --m-metadata-file fish_metadata_cleaned.tsv \
+  --o-visualization alpha-rarefaction_filtered.qzv 
+
+# unfiltered version
+qiime diversity alpha-rarefaction \
+  --i-table table.qza \
+  --i-phylogeny rooted-tree.qza \
+  --p-max-depth 2000 \
+  --m-metadata-file fish_metadata_cleaned.tsv \
+  --o-visualization alpha-rarefaction_unfiltered.qzv 
+  
+# Calculate alpha- and beta-diversity metrics
+qiime diversity core-metrics-phylogenetic \
+  --i-phylogeny rooted-tree.qza \
+  --i-table rocky-reef-gut-orders-filtered-table.qza \
+  --p-sampling-depth 500 \
+  --m-metadata-file fish_metadata_cleaned.tsv \
+  --output-dir core-metrics-results
+
+# Calculate alpha-group-significance
+# Faith_pd diversity
+qiime diversity alpha-group-significance \
+  --i-alpha-diversity core-metrics-results/faith_pd_vector.qza \
+  --m-metadata-file fish_metadata_cleaned.tsv \
+  --o-visualization core-metrics-results/faith-pd-group-significance.qzv
+
+# Evenness diversity
+qiime diversity alpha-group-significance \
+  --i-alpha-diversity core-metrics-results/evenness_vector.qza \
+  --m-metadata-file fish_metadata_cleaned.tsv  \
+  --o-visualization core-metrics-results/evenness-group-significance.qzv
+  
+# Calculate beta-group-significance
+qiime diversity beta-group-significance \
+  --i-distance-matrix core-metrics-results/unweighted_unifrac_distance_matrix.qza \
+  --m-metadata-file fish_metadata_cleaned.tsv  \
+  --m-metadata-column p_order \
+  --o-visualization core-metrics-results/unweighted-unifrac-p-order-significance.qzv \
+  --p-pairwise
+```
+
+### MPT PICRUSt2
+
+```{bash}
+
+# Filter the rocky-reef-gut-orders-filtered-table.qza to remove all the features with 5 or lower counts. 
+qiime feature-table filter-features \
+  --i-table rocky-reef-gut-orders-filtered-table.qza \
+  --p-min-frequency 5 \
+  --o-filtered-table feature-frequency-filtered-table.qza
+
+# Export the data
+mkdir picrust
+
+qiime tools export \
+  --input-path feature-frequency-filtered-table.qza \
+  --output-path picrust
+
+qiime tools export \
+  --input-path rep-seqs.qza \
+  --output-path picrust
+
+# Switch to the PICRUSt2 environment
+conda deactivate
+conda activate picrust2
+
+# Run PICRUSt2
+picrust2_pipeline.py \
+  -s picrust/dna-sequences.fasta \
+  -i picrust/feature-table.biom \
+  -o picrust_out
+
+```
