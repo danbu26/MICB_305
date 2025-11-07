@@ -16,6 +16,12 @@ Discussion of Alpha Beta Diversity Analysis
 
 Have plots ready by the week of Nov 24
 
+To-do before next meeting
+- Mixing the data to explore some potential significant diversity differences
+  -- Include all substrate location, kept the four orders
+  -- Include all substrata location, keep all the orders
+  -- Group non-perciformes orders together and compare with perciformes
+  
 
 
 
