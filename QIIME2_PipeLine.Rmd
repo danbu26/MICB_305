@@ -208,12 +208,12 @@ picrust2_pipeline.py \
 ```
 
 ### Exploring different filtering
-#### Gut, order (minus Myliobatiformes and Heterodontiformes)
+#### Gut, order (selected Perciformes, Centrarchiformes, Bleniiformes, Labriformes)
 ```{bash}
 qiime feature-table filter-samples \
   --i-table table.qza \
   --m-metadata-file fish_metadata_cleaned.tsv \
-  --p-where "[[sample_type] IN ('midgut', 'hindgut') AND [p_order] IN ('Perciformes','Centrarchiformes','Blenniiformes','Labriformes')" \
+  --p-where "[sample_type] IN ('midgut', 'hindgut') AND [p_order] IN ('Perciformes','Centrarchiformes','Blenniiformes','Labriformes')" \
   --o-filtered-table gut-orders-filtered-table.qza
 
 # Visualize ASV data with filtered dataset
@@ -222,3 +222,25 @@ qiime feature-table summarize \
   --o-visualization gut-orders-filtered-table.qzv \
   --m-sample-metadata-file fish_metadata_cleaned.tsv 
 ```
+
+#### Gut, order (kept all)
+```{bash}
+qiime feature-table filter-samples \
+  --i-table table.qza \
+  --m-metadata-file fish_metadata_cleaned.tsv \
+  --p-where "[sample_type] IN ('midgut', 'hindgut')" \
+  --o-filtered-table gut-filtered-table.qza
+
+# Visualize ASV data with filtered dataset
+qiime feature-table summarize \
+  --i-table gut-filtered-table.qza \
+  --o-visualization gut-filtered-table.qzv \
+  --m-sample-metadata-file fish_metadata_cleaned.tsv 
+```
+
+
+
+
+
+
+
