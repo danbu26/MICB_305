@@ -236,7 +236,7 @@ qiime feature-table summarize \
   --i-table gut-filtered-table.qza \
   --o-visualization gut-filtered-table.qzv \
   --m-sample-metadata-file fish_metadata_cleaned.tsv 
-```
+``` 
 
 
 
