@@ -22,6 +22,9 @@ To-do before next meeting
   -- Include all substrata location, keep all the orders
   -- Group non-perciformes orders together and compare with perciformes
   
+## Nov10
+
+Created datasets_and_results folder, added all .qzv and datasets files from the server(/work/project_2). 
 
 
 
