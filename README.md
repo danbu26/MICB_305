@@ -31,5 +31,8 @@ Created datasets_and_results folder, added all .qzv and datasets files from the 
 3. Discussion of the feedback of the proposal and potential revision.
 
 To do before next meeting:
+- Run the functional group analysis and differetial abundnace pairwisely
+- Make presentation to display the results of alpha diversity, indicator taxons, Differential Abundance, Core microbiome, and functional group analysis
+- Revision of the proposal
 
 
