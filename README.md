@@ -27,6 +27,7 @@ To-do before next meeting
 Created datasets_and_results folder, added all .qzv and datasets files from the server(/work/project_2). 
 ## Nov 12 - meeting
 Discussion of the results of the indicator species, core microbiome analysis, and differential abundance analysis
+
 To do before next meeting:
 
 
