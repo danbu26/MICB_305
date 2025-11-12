@@ -28,6 +28,7 @@ Created datasets_and_results folder, added all .qzv and datasets files from the 
 ## Nov 12 - meeting
 1. Discussion of the results of the indicator species, core microbiome analysis, and differential abundance analysis.
 2. Discussion of the results from the three analysis whether it is applicable to an random forest analysis.
+3. Discussion of the feedback of the proposal and potential revision.
 
 To do before next meeting:
 
