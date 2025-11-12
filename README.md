@@ -10,7 +10,7 @@ Feedback on Proposal
 
 Updated bash commands all the way to PICRUSt2
 
-## Nov 6
+## Nov 6 - meeting
 
 Discussion of Alpha Beta Diversity Analysis
 
@@ -25,8 +25,8 @@ To-do before next meeting
 ## Nov10
 
 Created datasets_and_results folder, added all .qzv and datasets files from the server(/work/project_2). 
-
-
-
+## Nov 12 - meeting
+Discussion of the results of the indicator species, core microbiome analysis, and differential abundance analysis
+To do before next meeting:
 
 
