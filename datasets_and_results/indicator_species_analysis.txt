@@ -1,0 +1,46 @@
+
+ Multilevel pattern analysis
+ ---------------------------
+
+ Association function: IndVal.g
+ Significance level (alpha): 0.05
+
+ Total number of species: 352
+ Selected number of species: 21 
+ Number of species associated to 1 group: 21 
+ Number of species associated to 2 groups: 0 
+ Number of species associated to 3 groups: 0 
+
+ List of species associated to each combination: 
+
+ Group Centrarchiformes  #sps.  6 
+                                      A      B  stat p.value   
+8e5369279bba9aa7f065cbcb9fbcf370 0.9787 0.5000 0.700   0.007 **
+4209dc9093e102a813a5c910bb4be00f 1.0000 0.3333 0.577   0.024 * 
+9afa2adfcf86397b7092a68675e64984 1.0000 0.3333 0.577   0.024 * 
+f99dc6b2f1b9b3f143efdffa70fe57e4 1.0000 0.3333 0.577   0.024 * 
+db2b8437ee06ac63448c8ed1b92e8a15 0.9947 0.3333 0.576   0.047 * 
+3fd0f1523476634c26495773ad5d8bc4 0.9855 0.3333 0.573   0.038 * 
+
+ Group Blenniiformes  #sps.  13 
+                                      A      B  stat p.value   
+2e30aa27f9aedd3dcefb276e118690ea 0.9802 0.6667 0.808   0.004 **
+6ec0c45b6523d2af14eab53aa618ab79 0.9633 0.5000 0.694   0.013 * 
+f1625fb350d6abd9c82b222523389579 0.8884 0.5000 0.666   0.022 * 
+7d577114d5a53141f436dece946b0f85 0.8257 0.5000 0.643   0.030 * 
+21d25b4be11380dadd62cd458cf1c681 0.6818 0.5000 0.584   0.048 * 
+feda05654e86eaa6105463c6a1addf6c 1.0000 0.3333 0.577   0.031 * 
+456b143ac25ec664ec5f6241a5029982 1.0000 0.3333 0.577   0.031 * 
+405e4b6653f4752a63547b2f0ad3a715 1.0000 0.3333 0.577   0.031 * 
+6e19244a8b387333f5940fe690430d77 1.0000 0.3333 0.577   0.023 * 
+227acb152fa53c3429863bb3a2e83043 1.0000 0.3333 0.577   0.031 * 
+9da6e114a7296d76eb6266d76d45b69f 1.0000 0.3333 0.577   0.031 * 
+ae4400c044d6df58d2cfb1b8e9e65569 0.9935 0.3333 0.575   0.030 * 
+3df2cb967fdc4279af2e4c513cb0667b 0.9642 0.3333 0.567   0.050 * 
+
+ Group Labriformes  #sps.  2 
+                                      A      B  stat p.value   
+91284db02a073ba994e604954fe46c59 1.0000 0.5000 0.707   0.006 **
+fea40184726be9d2438da7f5deba8d8e 0.9809 0.5000 0.700   0.010 **
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
