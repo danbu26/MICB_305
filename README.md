@@ -36,3 +36,4 @@ To do before next meeting:
 - Revision of the proposal
 
 
+# Problems: the feature-table.txt is too large to be uploaded
