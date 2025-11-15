@@ -185,27 +185,3 @@ Centrarchiformes_table %>% subset(!is.na(lfc_p_orderCentrarchiformes)) |>
 
 
 ```
-
-```{r Saved-core-microbiome}
-
-# psrare = rarefy_even_depth(ps, sample.size = 191)
-# ps_rare_relab = transform(psrare, 'compositional')
-# ps_rare_relab_order = tax_glom(ps_rare_relab, "Genus")
-# 
-# order.perciformes = subset_samples(ps_rare_relab_order, p_order == "Perciformes")
-# order.blenniiformes = subset_samples(ps_rare_relab_order, p_order == "Blenniiformes") 
-# order.labriformes = subset_samples(ps_rare_relab_order, p_order == "Labriformes")
-# order.centrarchiformes = subset_samples(ps_rare_relab_order, p_order == "Centrarchiformes")
-# 
-# 
-# sample_data(order.perciformes)
-# 
-# ASVs_performes = core_members(order.perciformes, detection=0.001, prevalence = 0.4)
-# ASVs_blenniiformes = core_members(order.blenniiformes, detection=0.001, prevalence = 0.4)
-# ASVs_labriformes = core_members(order.labriformes, detection=0.001, prevalence = 0.4)
-# ASVs_centrarchiformes = core_members(order.centrarchiformes, detection=0.001, prevalence = 0.4)
-# 
-# ASVs_centrarchiformes
-# 
-# ggVennDiagram(list(ASVs_performes, ASVs_blenniiformes, ASVs_labriformes, ASVs_centrarchiformes), set_size = 6, category.names = c("Perciformes","Blenniiformes", "Labriformes", "Centrarchiformes") )
-```
