@@ -37,3 +37,5 @@ To do before next meeting:
 
 
 # Problems: the feature-table.txt is too large to be uploaded
+## Nov 20 - meeting
+- Presentation and Discussion of results from core microbiome analysis, indicator species analysis, alpha diversity analysis, and DESeq analysis
