@@ -44,3 +44,5 @@ To do before next meeting
 - Keep p-value
 - No taxonomical differences but functional differences
 - Send whole datasets before breaking up to Arvil for running PICRUST2
+- Fix the graph for present-ready
+- Redo alpha diversity in R for present-ready
