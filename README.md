@@ -46,3 +46,7 @@ To do before next meeting:
 - Send whole datasets before breaking up to Arvil for running PICRUST2
 - Fix the graph for present-ready
 - Redo alpha diversity in R for present-ready
+## Nov 27 - meeting
+- discussion for the presentation
+- suggestions for the presentation
+- final results discussion
