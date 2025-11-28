@@ -32,17 +32,6 @@ table(sample_data(psrare)$p_order)
 Calculate alpha diversity.
 
 ```{r calculate and plot alpha diversity}
-# Let's see what the default plot looks like:
-set.seed(420)
-p = plot_richness(psrare, x = 'p_order', 
-                  measures = c('Observed','Shannon','Chao1','Simpson'),
-                  color = 'p_order',
-                  )
-p
-
-# It's okay, but it's not ideal to have all the points vertically aligned. 
-# It's hard to tell if there are any overlapping points.
-
 # Pull the data from the plot:
 pdata = p$data
 
@@ -51,10 +40,10 @@ str(pdata) # variable denotes metric, value denotes value
 # Let's plot this again:
 p_formatted = pdata %>% ggplot(aes(p_order,value,fill = p_order)) +
   
-  # Don't plot outlier points - we're plotting all points below.
+  # Don't plot outlier points
   geom_boxplot(outlier.shape = NA) + 
   
-  # Now we can space the points out sideways, reducing overlap.
+  # Space the points out sideways, reducing overlap.
   geom_jitter(height=0,width=0.2) +
   
   # Add some formatting
@@ -83,48 +72,21 @@ comparisons = list( c('Perciformes','Centrarchiformes'),
 p_formatted +
   stat_compare_means(comparisons = comparisons, method='kruskal.test', size=6)
 
-# Oftentimes the p values get cut off at the top - just expand the axis by a fraction
 p_formatted +
   stat_compare_means(comparisons = comparisons, method='kruskal.test', size=6) +
   scale_y_continuous(expand = expansion(mult = c(0, .1))) # c(bottom, top)
 ```
 
-But what if we want to adjust our P values, or use something other than a Wilcoxon test?
-
-Let's try running the stats separately, then adding them to the plot.
-
 ```{r manual stats}
-# We'll stick with Wilcoxon for comparison.
-
-# A single test would look something like this:
-to_compare = c('Perciformes','Centrarchiformes')
-temp = pdata %>% filter(p_order %in% to_compare)
-ktest = kruskal.test(formula = value ~ p_order, data = temp)
-ktest # If we want to compile our results into a table, this needs wrangling.
-
-# Wrangling a single Wilcoxon test ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# install.packages("broom")
-library(broom)
-stats = ktest %>% broom::tidy()
-stats # Good, it's in a table now!
-# Let's add a column that tells us what we're comparing.
-stats = stats %>% 
-  mutate(group1 = to_compare[1], group2 = to_compare[2],
-         .before = 'statistic') # Make it the first column
-stats # Looks good!
-
-# Running all Wilcoxon tests ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Let's avoid writing out the tests for each metric separately.
-# Group_modify to the rescue!
+# Running all Kruskal Wallis tests ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 comparisons = list( c('Perciformes','Centrarchiformes'), 
                     c('Perciformes','Blenniiformes'),
                     c('Perciformes','Labriformes'))
 
 stats = pdata %>% group_by(variable) %>% # Running each metric concurrently
   group_modify(~ {
-    # Now we'll run our single test for each of the above comparisons
     
-    temp_stats = data.frame() # We'll put our stats here
+    temp_stats = data.frame() 
     
     for(i in comparisons){
       # i = comparisons[[1]]
@@ -149,7 +111,7 @@ stats = pdata %>% group_by(variable) %>% # Running each metric concurrently
   ) %>% 
   ungroup()
 
-View(stats) # Beautiful!
+View(stats)
 ```
 
 You have two options for adding the stats. The first is to add them manually in Powerpoint or a similar program. This is perfectly acceptable, but also a pain.
@@ -173,7 +135,7 @@ p_formatted +
   geom_text(data = annot, aes(label = label, y = ypos), size=5) +
   scale_y_continuous(expand = expansion(mult = c(0,0.1)))
 
-# The above plot is really busy - let's change the P values to asterisks.
+# Change the P values to asterisks.
 annot = annot %>% 
   mutate(label2 = ifelse(padj>0.05,'NS',
                          ifelse(padj>0.01,'*',
@@ -183,18 +145,16 @@ annot = annot %>%
 p_final = p_formatted +
   geom_text(data = annot, aes(label = label2, y = ypos), size=5) +
   scale_y_continuous(expand = expansion(mult = c(0,0.1)))
-p_final # Sweet!
+p_final
 ```
-
-Let's save our best plot, as well as our statistics.
 
 ```{r save outputs}
 # Save plot
-ggsave('datasets_and_results - Alpha Diversity.jpeg',
+ggsave('../datasets_and_results  - Alpha Diversity.jpeg',
        plot = p_final,
        height= 4, width = 12)
 
 # Save statistics as an Excel file
 writexl::write_xlsx(list('Alpha Diversity' = stats),
-                    'datasets_and_results - Alpha Diversity.xlsx')
+                    '../datasets_and_results  - Alpha Diversity.xlsx')
 ```
