@@ -61,5 +61,10 @@ To do before next meeting:
   - fig 3: PICRUST with three sub panels (abc)
   - table 1: indicator taxa
 - future direction: whether fish diet correlates with functional analysis
-
+##### Check whether manuscript need to uploaded onto Github
+##### Check whether the "rocky reef" habitat indicate rocky reef habitats in a specific region
+# Limitation
+- small sample
+- large gap between different fish orders sample counts
+- choices of rarefaction depth could be biased
 
