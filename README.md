@@ -60,4 +60,6 @@ To do before next meeting:
   - fig 2: core microbiome
   - fig 3: PICRUST with three sub panels (abc)
   - table 1: indicator taxa
+- future direction: whether fish diet correlates with functional analysis
+
 
