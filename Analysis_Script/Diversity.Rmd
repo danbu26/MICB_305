@@ -190,11 +190,11 @@ Let's save our best plot, as well as our statistics.
 
 ```{r save outputs}
 # Save plot
-ggsave('../Results/Plots/Module 13b - Alpha Diversity.jpeg',
+ggsave('datasets_and_results - Alpha Diversity.jpeg',
        plot = p_final,
        height= 4, width = 12)
 
 # Save statistics as an Excel file
 writexl::write_xlsx(list('Alpha Diversity' = stats),
-                    '../Results/Tables/Module 13b - Alpha Diversity.xlsx')
+                    'datasets_and_results - Alpha Diversity.xlsx')
 ```
