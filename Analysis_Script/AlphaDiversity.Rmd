@@ -1,5 +1,5 @@
 ---
-title: "Diversity"
+title: "AlphaDiversity"
 output: html_document
 ---
 
