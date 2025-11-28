@@ -97,28 +97,28 @@ Let's try running the stats separately, then adding them to the plot.
 # We'll stick with Wilcoxon for comparison.
 
 # A single test would look something like this:
-to_compare = c('gut','tongue')
-temp = pdata %>% filter(body.site %in% to_compare)
-wtest = wilcox.test(formula = value ~ body.site, data = temp, conf.int = T)
-wtest # If we want to compile our results into a table, this needs wrangling.
+to_compare = c('Perciformes','Centrarchiformes')
+temp = pdata %>% filter(p_order %in% to_compare)
+ktest = kruskal.test(formula = value ~ p_order, data = temp)
+ktest # If we want to compile our results into a table, this needs wrangling.
 
 # Wrangling a single Wilcoxon test ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # install.packages("broom")
 library(broom)
-stats = wtest %>% broom::tidy()
+stats = ktest %>% broom::tidy()
 stats # Good, it's in a table now!
 # Let's add a column that tells us what we're comparing.
 stats = stats %>% 
   mutate(group1 = to_compare[1], group2 = to_compare[2],
-         .before = 'estimate') # Make it the first column
+         .before = 'statistic') # Make it the first column
 stats # Looks good!
 
 # Running all Wilcoxon tests ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Let's avoid writing out the tests for each metric separately.
 # Group_modify to the rescue!
-comparisons = list( c('gut','left palm'), 
-                    c('gut','right palm'),
-                    c('gut','tongue'))
+comparisons = list( c('Perciformes','Centrarchiformes'), 
+                    c('Perciformes','Blenniiformes'),
+                    c('Perciformes','Labriformes'))
 
 stats = pdata %>% group_by(variable) %>% # Running each metric concurrently
   group_modify(~ {
@@ -129,13 +129,13 @@ stats = pdata %>% group_by(variable) %>% # Running each metric concurrently
     for(i in comparisons){
       # i = comparisons[[1]]
       # Filter dataset
-      temp = .x %>% filter(body.site %in% i) #.x is the grouped dataset
+      temp = .x %>% filter(p_order %in% i) #.x is the grouped dataset
       # Run test
-      wtest = wilcox.test(formula = value ~ body.site,
-                          data = temp, conf.int = T) %>%
+      wtest = kruskal.test(formula = value ~ p_order,
+                          data = temp) %>%
         broom::tidy() %>% 
         mutate(group1 = i[1], group2 = i[2],
-               .before = 'estimate')
+               .before = 'statistic')
       # Add to temp_stats
       temp_stats = bind_rows(temp_stats,wtest)
     }
@@ -163,7 +163,7 @@ maxvals = pdata %>% group_by(variable) %>%
 
 # Create a table that describes which p value goes where
 annot = stats %>% 
-  rename(body.site = group2) %>% # To match the plot data
+  rename(p_order = group2) %>% # To match the plot data
   mutate(label = paste('Padj=',signif(padj,digits = 2),sep='')) %>% # Keep Padj to 2 sig figs
   left_join(maxvals) %>% 
   mutate(ypos = 1.1*max.y) # Place P values just a little above the highest point
