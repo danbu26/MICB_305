@@ -9,7 +9,7 @@ library(phyloseq)
 library(vegan)
 
 # Load object
-ps = readRDS('../datasets_and_results/phyloseq_taxonomy.rds')
+ps = readRDS('../Datasets/phyloseq_taxonomy.rds')
 ```
 
 Rarefy phyloseq object.
@@ -150,11 +150,11 @@ p_final
 
 ```{r save outputs}
 # Save plot
-ggsave('../datasets_and_results  - Alpha Diversity.jpeg',
+ggsave('../Results - Alpha Diversity.jpeg',
        plot = p_final,
        height= 4, width = 12)
 
 # Save statistics as an Excel file
 writexl::write_xlsx(list('Alpha Diversity' = stats),
-                    '../datasets_and_results  - Alpha Diversity.xlsx')
+                    '../Results - Alpha Diversity.xlsx')
 ```
