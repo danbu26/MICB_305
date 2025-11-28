@@ -9,7 +9,7 @@ library(phyloseq)
 library(vegan)
 
 # Load object
-ps = readRDS('../Datasets/phyloseq_taxonomy.rds')
+ps = readRDS('../datasets_and_results/phyloseq_taxonomy.rds')
 ```
 
 Rarefy phyloseq object.
