@@ -1,0 +1,188 @@
+---
+title: "picrust_analysis"
+output: html_document
+---
+
+```{r loading packages}
+library(tidyverse)
+library(phyloseq)
+library(ggpicrust2)
+```
+
+```{r loading phyloseq object and PICRUSt2 results}
+
+# loading phyloseq object
+meta = readRDS('phyloseq_taxonomy.rds') %>% .@sam_data %>% data.frame() |>  rownames_to_column('sample_name')
+
+#loading PICRUSt2 results
+ko = read.delim('four_order_pred_metagenome_unstrat.tsv', row.names = 1)
+
+# Make sure the sample name corresponds with each other by adding an "X" to sample name in phyloseq object
+meta$sample_name <- paste0("X", meta$sample_name)
+
+# filter the metadata for each pairwise analysis
+Perciformes_Labfriformes_meta = meta |> filter(p_order == c("Perciformes", "Labriformes"))
+Perciformes_Centrarchiformes_meta = meta |> filter(p_order == c("Perciformes", "Centrarchiformes"))
+Perciformes_Blenniiformes_meta = meta |> filter(p_order == c("Perciformes", "Blenniiformes"))
+
+# extract the sample names from each pairwise metadata
+PL_sample_name = Perciformes_Labfriformes_meta$sample_name
+PC_sample_name = Perciformes_Centrarchiformes_meta$sample_name
+PB_sample_name = Perciformes_Blenniiformes_meta$sample_name
+
+# use the extracted sample names to subset ko results from PICRUSt2 results that are relevant to the pairwise analysis
+PerciformesvsLabriformes_ko = ko[,PL_sample_name]
+PerciformesvsCentrarchiformes_ko = ko[,PC_sample_name]
+PerciformesvsBlenniiformes_ko = ko[,PB_sample_name]
+
+```
+
+```{r LindDA pathway abundance differential analysis for each pairwise metadata}
+
+
+daa_results_PerciformesvsLabriformes = pathway_daa(abundance = PerciformesvsLabriformes_ko,
+                             metadata = Perciformes_Labfriformes_meta, 
+                             group = "p_order", 
+                             daa_method = "LinDA", 
+                             select = NULL, reference = NULL)
+
+daa_results_PerciformesvsBlenniiformes = pathway_daa(abundance = PerciformesvsBlenniiformes_ko,
+                             metadata = Perciformes_Blenniiformes_meta, 
+                             group = "p_order", 
+                             daa_method = "LinDA", 
+                             select = NULL, reference = NULL)
+
+daa_results_PerciformesvsCentrarchiformes = pathway_daa(abundance = PerciformesvsCentrarchiformes_ko,
+                             metadata = Perciformes_Centrarchiformes_meta, 
+                             group = "p_order", 
+                             daa_method = "LinDA", 
+                             select = NULL, reference = NULL)
+```
+```{r convert KO to KEGG term and plot the results of KO functional analysis}
+
+# Convert KO to KEGG
+daa_annotated_PerciformesvsLabriformes = pathway_annotation(pathway = "KO",
+daa_results_df = daa_results_PerciformesvsLabriformes, ko_to_kegg = TRUE)
+ 
+daa_annotated_PerciformesvsBlenniiformes = pathway_annotation(pathway = "KO",
+daa_results_df = daa_results_PerciformesvsBlenniiformes, ko_to_kegg = TRUE)
+ 
+daa_annotated_PerciformesvsCentrarchiformes = pathway_annotation(pathway = "KO",
+daa_results_df = daa_results_PerciformesvsCentrarchiformes, ko_to_kegg = TRUE)
+
+
+# Save the converted results to new phyloseq objects
+saveRDS(daa_annotated_PerciformesvsLabriformes,'Perciformes_Labriformes_daa_annotated_results_df.rds')
+
+saveRDS(daa_annotated_PerciformesvsCentrarchiformes,'Perciformes_Centrarchiformes_daa_annotated_results_df.rds')
+
+saveRDS(daa_annotated_PerciformesvsBlenniiformes,'Perciformes_Blenniiformes_daa_annotated_results_df.rds')
+
+
+# read the new phyloseq objects
+daa_annotated_results_PerciformesvsLabriformes = readRDS('Perciformes_Labriformes_daa_annotated_results_df.rds')
+
+daa_annotated_results_PerciformesvsBlenniiformes = readRDS('Perciformes_Blenniiformes_daa_annotated_results_df.rds')
+
+daa_annotated_results_PerciformesvsCentrarchiformes = readRDS('Perciformes_Centrarchiformes_daa_annotated_results_df.rds')
+
+
+# plot the results of the KO functional analysis using pathway_errorbar
+plot_PerciformesvsLabriformes = pathway_errorbar(abundance = PerciformesvsLabriformes_ko, 
+                     daa_results_df = daa_annotated_results_PerciformesvsLabriformes, 
+                     Group = Perciformes_Labfriformes_meta$p_order, 
+                     p_values_threshold = 0.1, 
+                     order = "pathway_class", 
+                     ko_to_kegg = T,
+                     p_value_bar = TRUE,
+                     x_lab = "pathway_name",
+                     pathway_class_text_size = 7,
+                     pathway_names_text_size = 13,
+                     pvalue_size = 7,
+                     legend_text_size = 10,
+                     legend_title_size = 10)
+
+plot_PerciformesvsBlenniiformes = pathway_errorbar(abundance = PerciformesvsBlenniiformes_ko, 
+                     daa_results_df = daa_annotated_results_PerciformesvsBlenniiformes, 
+                     Group = Perciformes_Blenniiformes_meta$p_order, 
+                     p_values_threshold = 0.1, 
+                     order = "pathway_class", 
+                     ko_to_kegg = T,
+                     p_value_bar = TRUE,
+                     x_lab = "pathway_name",
+                     pathway_class_text_size = 7,
+                     pathway_names_text_size = 13,
+                     pvalue_size = 7,
+                     legend_text_size = 10,
+                     legend_title_size = 10)
+
+plot_PerciformesvsCentrarchiformes = pathway_errorbar(abundance = PerciformesvsCentrarchiformes_ko, 
+                     daa_results_df = daa_annotated_results_PerciformesvsCentrarchiformes, 
+                     Group = Perciformes_Centrarchiformes_meta$p_order, 
+                     p_values_threshold = 0.1, 
+                     order = "pathway_class", 
+                     ko_to_kegg = T,
+                     p_value_bar = TRUE,
+                     x_lab = "pathway_name",
+                     pathway_class_text_size = 7,
+                     pathway_names_text_size = 13,
+                     pvalue_size = 7,
+                     legend_text_size = 10,
+                     legend_title_size = 10)
+
+source('ggpicrust2_errorbar_function_fixed.R')
+
+# fixed plot of KO functional analysis results
+daa_annotated_results_PerciformesvsLabriformes %>% filter(p_adjust< 0.1, abs(log2FoldChange) > 5) %>% nrow()
+
+fixed_plot_PerciformesvsLabfrifomes_functional_Analysis = pathway_errorbar_fixed(abundance = PerciformesvsLabriformes_ko,
+                     daa_results_df = daa_annotated_results_PerciformesvsLabriformes, 
+                     Group = Perciformes_Labfriformes_meta$p_order, 
+                     wrap_label = T, wraplength=60,
+                     fc_cutoff = 5, order_by_log = F,
+                     p_values_threshold = 0.1, 
+                     order = "pathway_class", 
+                     ko_to_kegg = TRUE,
+                     p_value_bar = TRUE,
+                     x_lab = "pathway_name")
+
+daa_annotated_results_PerciformesvsBlenniiformes %>% filter(p_adjust< 0.1, abs(log2FoldChange) > 5) %>% nrow()
+
+fixed_plot_PerciformesvsBlenniiformes_functional_Analysis = pathway_errorbar_fixed(abundance = PerciformesvsBlenniiformes_ko,
+                     daa_results_df = daa_annotated_results_PerciformesvsBlenniiformes, 
+                     Group = Perciformes_Blenniiformes_meta$p_order, 
+                     wrap_label = T, wraplength=60,
+                     fc_cutoff = 5, order_by_log = F,
+                     p_values_threshold = 0.1, 
+                     order = "pathway_class", 
+                     ko_to_kegg = TRUE,
+                     p_value_bar = TRUE,
+                     x_lab = "pathway_name")
+
+daa_annotated_results_PerciformesvsCentrarchiformes %>% filter(p_adjust< 0.1, abs(log2FoldChange) > 5) %>% nrow()
+
+fixed_plot_PerciformesvsCentrarchiformes_functional_Analysis = pathway_errorbar_fixed(abundance = PerciformesvsCentrarchiformes_ko,
+                     daa_results_df = daa_annotated_results_PerciformesvsCentrarchiformes, 
+                     Group = Perciformes_Centrarchiformes_meta$p_order, 
+                     wrap_label = T, wraplength=60,
+                     fc_cutoff = 5, order_by_log = F,
+                     p_values_threshold = 0.1, 
+                     order = "pathway_class", 
+                     ko_to_kegg = TRUE,
+                     p_value_bar = TRUE,
+                     x_lab = "pathway_name")
+
+fixed_plot_PerciformesvsLabfrifomes_functional_Analysis
+
+fixed_plot_PerciformesvsBlenniiformes_functional_Analysis
+
+fixed_plot_PerciformesvsCentrarchiformes_functional_Analysis
+
+
+ggsave("Perciformes_vs_Labriformes_pathway_plot.png", fixed_plot_PerciformesvsLabfrifomes_functional_Analysis, width = 20, height = 10, dpi = 300)
+ggsave("Perciformes_vs_Blenniiformes_pathway_plot.png", fixed_plot_PerciformesvsBlenniiformes_functional_Analysis, width = 20, height = 10, dpi = 300)
+ggsave("Perciformes_vs_Centrarchiformes_pathway_plot.png", fixed_plot_PerciformesvsCentrarchiformes_functional_Analysis, width = 20, height = 10, dpi = 300)
+
+```
+
+
