@@ -128,7 +128,7 @@ ggsave("../Core_Microbiome.png", plot = ggVennDiagram_plot, width = 10, height =
 
 ```
 
-```{r DESeq-analysis}
+```{r ANCOM-BC analysis}
 
 ps_Labriformes = subset_samples(ps, p_order == c("Perciformes","Labriformes"))
 ps_Blenniiformes = subset_samples(ps, p_order == c("Perciformes", "Blenniiformes"))
