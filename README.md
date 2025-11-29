@@ -67,4 +67,5 @@ To do before next meeting:
 - small sample
 - large gap between different fish orders sample counts
 - choices of rarefaction depth could be biased
+- No seasonal diety data for fish order
 
