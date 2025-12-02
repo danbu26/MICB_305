@@ -3,8 +3,7 @@ title: "BetaDiversity"
 output: html_document
 ---
 
-
-Load in taxonomy phyloseq object, run beta diversity, plot  results, and run statistics.
+Load in taxonomy phyloseq object, run beta diversity, plot results, and run statistics.
 
 ```{r Load data and libraries}
 library(tidyverse)
@@ -25,7 +24,7 @@ ps_bray = phyloseq::distance(psrare, method = "wunifrac")
 View(as.matrix(ps_bray)) # Every pairwise comparison included
 ```
 
-Apply multidimensional scaling (MDS). This takes the distance matrix and reduces it to a few dimensions. 
+Apply multidimensional scaling (MDS). This takes the distance matrix and reduces it to a few dimensions.
 
 ```{r normalize and plot}
 set.seed(420)
@@ -75,38 +74,67 @@ stats
 
 Subset the distance matrix object, then compare specific groups that are shown in the beta diversity plot
 
-```{r attempt 2 - subset distance matrix}
+Comparing Perciformes and Labriformes
+```{r - subset distance matrix}
 set.seed(420)
 # Select two orders to compare
-to_compare = c('Perciformes','Labriformes')
+to_compare_PL = c('Perciformes','Labriformes')
 # Labriformes Centrarchiformes Blenniiformes
 
 # List samples that belong to those orders
-samples_to_keep = metadata %>% filter(p_order %in% to_compare) %>% rownames()
+samples_to_keep_PL = metadata %>% filter(p_order %in% to_compare_PL) %>% rownames()
 
 # Subset the distance matrix to only include those samples
-ps_bray_sub = as.matrix(ps_bray)[samples_to_keep,samples_to_keep] %>% as.dist()
+ps_bray_sub_PL = as.matrix(ps_bray)[samples_to_keep_PL,samples_to_keep_PL] %>% as.dist()
 
-# Run a PERMANOVA on just those two oders
-stats_univar = adonis2(ps_bray_sub ~ p_order,
-                       data = metadata %>% filter(p_order %in% to_compare))
+# Run a PERMANOVA on just those two orders
+stats_univar_PL = adonis2(ps_bray_sub_PL ~ p_order,
+                       data = metadata %>% filter(p_order %in% to_compare_PL))
 
-stats_univar 
+stats_univar_PL
 ```
 
-P values are usually added manually to beta diversity plots, or are added to the figure legend.
+Comparing Perciformes and Centrarchiformes
+```{r - subset distance matrix}
+set.seed(420)
+# Select two orders to compare
+to_compare_PC = c('Perciformes','Centrarchiformes')
+# Labriformes Centrarchiformes Blenniiformes
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# List samples that belong to those orders
+samples_to_keep_PC = metadata %>% filter(p_order %in% to_compare_PC) %>% rownames()
 
-We've established that body site is a major driver of beta diversity. In particular, most of the differences seem to be driven by the fact that the gut samples ar dramatically different from everything else.
+# Subset the distance matrix to only include those samples
+ps_bray_sub_PC = as.matrix(ps_bray)[samples_to_keep_PC,samples_to_keep_PC] %>% as.dist()
 
-What if you don't care about the gut samples at all? Beta diversity calculations are influenced by every sample included in the dataset, so even if you remove the gut samples after calculating distances, they're still going to have a huge influence on the results.
+# Run a PERMANOVA on just those two orders
+stats_univar_PC = adonis2(ps_bray_sub_PC ~ p_order,
+                       data = metadata %>% filter(p_order %in% to_compare_PC))
 
-In this case, it's best to simply remove the gut samples from the phyloseq object, then recalculate distances and MDS.
+stats_univar_PC
+```
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Comparing Perciformes and Blenniiformes
+```{r - subset distance matrix}
+set.seed(420)
+# Select two orders to compare
+to_compare_PB = c('Perciformes','Blenniiformes')
+# Labriformes Centrarchiformes Blenniiformes
 
-Let's save our beta diversity plot, as well as our pre-subsetting statistics.
+# List samples that belong to those orders
+samples_to_keep_PB = metadata %>% filter(p_order %in% to_compare_PB) %>% rownames()
+
+# Subset the distance matrix to only include those samples
+ps_bray_sub_PB = as.matrix(ps_bray)[samples_to_keep_PB,samples_to_keep_PB] %>% as.dist()
+
+# Run a PERMANOVA on just those two orders
+stats_univar_PB = adonis2(ps_bray_sub_PB ~ p_order,
+                       data = metadata %>% filter(p_order %in% to_compare_PB))
+
+stats_univar_PB
+```
+
+
 
 ```{r save outputs}
 # Save plot
