@@ -63,6 +63,11 @@ To do before next meeting:
 - future direction: whether fish diet correlates with functional analysis
 ##### Check whether manuscript need to uploaded onto Github
 ##### Check whether the "rocky reef" habitat indicate rocky reef habitats in a specific region
+## Dec 4 - meeting
+- Discussion for Manuscript
+- Discussion of "DISCUSSIONS" section in Manuscript
+- Discussion about the ANCOM-BC Analysis
+- Discussion about future directions
 # Limitation
 - small sample
 - large gap between different fish orders sample counts
