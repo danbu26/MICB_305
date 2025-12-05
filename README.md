@@ -74,3 +74,16 @@ To do before next meeting:
 - choices of rarefaction depth could be biased
 - No seasonal diety data for fish order
 
+## Dec 4 - meeting
+- Look at other articles on the UJEMI for presenting results in the manuscript
+- Focus on the discussion section 
+- Result title should a one informative, takeaway sentence (similar to the slides)
+- Table: statistic of each indicator taxa
+- Mention p-values in the figures/description of figures; don't mention them in the text; don't repeate information
+- In the method section, remember to site the papers of tools and packages used
+- 
+
+
+
+
+
