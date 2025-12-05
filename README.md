@@ -92,7 +92,7 @@ _ Highlight research gap and link to reason why we study
 - Look at UJEMI+
 - Reform the paragraph and table for indicator species
 - Add ANCOM-BC results to indicator species analysis
-- Make sure not to include similar inLimitation
+- Make sure not to include similar ideas in Limitation
 
 
 
