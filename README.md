@@ -81,7 +81,7 @@ To do before next meeting:
 - Table: statistic of each indicator taxa
 - Mention p-values in the figures/description of figures; don't mention them in the text; don't repeate information
 - In the method section, remember to site the papers of tools and packages used
-- 
+- Justify why we want a larger sample size in limitation (Perciformes has ~70% of total sample numbers)
 
 
 
