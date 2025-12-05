@@ -89,7 +89,10 @@ _ Highlight research gap and link to reason why we study
 - Remove Random Forest content in the introduction
 - Manuscript is more like a flow of a story
 - Formatting: Figures should be at the end of the document; supplemental as separate files 
-- Look at UJEMI+ 
+- Look at UJEMI+
+- Reform the paragraph and table for indicator species
+- Add ANCOM-BC results to indicator species analysis
+- Make sure not to include similar inLimitation
 
 
 
