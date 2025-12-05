@@ -74,7 +74,7 @@ To do before next meeting:
 - choices of rarefaction depth could be biased
 - No seasonal diety data for fish order
 
-## Dec 4 - meeting
+### meeting notes
 - Look at other articles on the UJEMI for presenting results in the manuscript
 - Focus on the discussion section 
 - Result title should a one informative, takeaway sentence (similar to the slides)
