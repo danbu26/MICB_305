@@ -87,7 +87,7 @@ _ Highlight research gap and link to reason why we study
 - Aim is for proposal, it's not necessary for the manuscript; it's irrelevant
 - Remove Random Forest content in the introduction
 - Manuscript is more like a flow of a story
-- 
+- Formatting: Figures should be at the end of the document; supplemental as separate files 
 
 
 
