@@ -82,6 +82,12 @@ To do before next meeting:
 - Mention p-values in the figures/description of figures; don't mention them in the text; don't repeate information
 - In the method section, remember to site the papers of tools and packages used
 - Justify why we want a larger sample size in limitation (Perciformes has ~70% of total sample numbers)
+_ Highlight research gap and link to reason why we study
+- Background information (whats known, whats not known); don't explicitly mention hypothesis
+- Aim is for proposal, it's not necessary for the manuscript; it's irrelevant
+- Remove Random Forest content in the introduction
+- Manuscript is more like a flow of a story
+- 
 
 
 
