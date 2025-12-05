@@ -75,6 +75,7 @@ To do before next meeting:
 - No seasonal diety data for fish order
 
 ### meeting notes
+- Update details notes for previous meetings
 - Look at other articles on the UJEMI for presenting results in the manuscript
 - Focus on the discussion section 
 - Result title should a one informative, takeaway sentence (similar to the slides)
